@@ -6,15 +6,19 @@ var socketIO = require('socket.io');
 var app = express();
 var server = http.Server(app);
 var io = socketIO(server);
-app.set('port', 5000);
+
+app.set('port', process.env.PORT || 8080);
 app.use('/static', express.static(__dirname + '/static'));
 // Routing
 app.get('/', function(request, response) {
   response.sendFile(path.join(__dirname, 'index.html'));
 });
+
+var port = process.env.PORT || 8080;
+
 // Starts the server.
-server.listen(5000, function() {
-  console.log('Starting server on port 5000');
+server.listen(port, function() {
+  console.log('Starting server on port ' + port);
 });
 
 // Add the WebSocket handlers
