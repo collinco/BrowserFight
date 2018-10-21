@@ -21,14 +21,6 @@ server.listen(port, function() {
   console.log('Starting server on port ' + port);
 });
 
-// Add the WebSocket handlers
-io.on('connection', function(socket) {
-});
-
-setInterval(function() {
-    io.sockets.emit('message', 'hi!');
-}, 1000);
-
 var players = {};
 io.on('connection', function(socket) {
   socket.on('new player', function() {
@@ -52,7 +44,26 @@ io.on('connection', function(socket) {
       player.y += 5;
     }
   });
+
+  // remove disconnected player
+    socket.on('disconnect', function() {
+        delete players[socket.id]
+    });
 });
+
 setInterval(function() {
   io.sockets.emit('state', players);
 }, 1000 / 60);
+
+io.on('connection', function(socket) {
+
+});
+
+//   var lastUpdateTime = (new Date()).getTime();
+//   setInterval(function() {
+//   // code ...
+//   var currentTime = (new Date()).getTime();
+//   var timeDifference = currentTime - lastUpdateTime;
+//   player.x += 5 * timeDifference;
+//   lastUpdateTime = currentTime;
+// }, 1000 / 60);
