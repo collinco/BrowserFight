@@ -29,6 +29,7 @@ io.on('connection', function(socket) {
       y: 300
     };
   });
+
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
     if (data.left) {
@@ -43,12 +44,47 @@ io.on('connection', function(socket) {
     if (data.down) {
       player.y += 5;
     }
+    if (data.jump) {
+        player.y += 5;
+      }
   });
 
-  // remove disconnected player
+
+  socket.on('jump', function(data) {
+    var player = players[socket.id] || {};
+
+    var steps = 0;
+        
+    function executeMethod () {
+        steps++
+        if( steps > 11) {
+            player.y += 5;
+        } else {
+            player.y -= 5;
+        }
+        if (steps <= 20) {
+            setTimeout(executeMethod, 20);
+        }
+    }
+
+    setTimeout(executeMethod, 20);
+    
+  });
+
+    // remove disconnected player
     socket.on('disconnect', function() {
         delete players[socket.id]
     });
+
+    // var lastUpdateTime = (new Date()).getTime();
+    // setInterval(function() {
+    //     var player = players[socket.id] || {};
+    //     // code ...
+    //     var currentTime = (new Date()).getTime();
+    //     var timeDifference = currentTime - lastUpdateTime;
+    //     player.x += 5 * timeDifference;
+    //     lastUpdateTime = currentTime;
+    // }, 1000 / 60);
 });
 
 setInterval(function() {
@@ -58,12 +94,3 @@ setInterval(function() {
 io.on('connection', function(socket) {
 
 });
-
-//   var lastUpdateTime = (new Date()).getTime();
-//   setInterval(function() {
-//   // code ...
-//   var currentTime = (new Date()).getTime();
-//   var timeDifference = currentTime - lastUpdateTime;
-//   player.x += 5 * timeDifference;
-//   lastUpdateTime = currentTime;
-// }, 1000 / 60);
