@@ -52,22 +52,29 @@ io.on('connection', function(socket) {
 
   socket.on('jump', function(data) {
     var player = players[socket.id] || {};
-
     var steps = 0;
+    
+    if (!player.currentlyJumping) {
+        player.currentlyJumping = true;
         
-    function executeMethod () {
-        steps++
-        if( steps > 11) {
-            player.y += 5;
-        } else {
-            player.y -= 5;
+        function executeMethod () {
+            steps++
+    
+            if( steps > 16) {
+                player.y += 5;
+            } else {
+                player.y -= 5;
+            }
+    
+            if (steps <= 30) {
+                setTimeout(executeMethod, 20);
+            } else {
+                player.currentlyJumping = false;
+            }
         }
-        if (steps <= 20) {
-            setTimeout(executeMethod, 20);
-        }
+    
+        setTimeout(executeMethod, 20);
     }
-
-    setTimeout(executeMethod, 20);
     
   });
 
