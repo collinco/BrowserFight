@@ -22,7 +22,13 @@ server.listen(port, function() {
 });
 
 var players = {};
+
+var projectiles = {};
+var projectileId = 0;
+
 io.on('connection', function(socket) {
+    
+
   socket.on('new player', function() {
     players[socket.id] = {
       x: 300,
@@ -56,7 +62,7 @@ io.on('connection', function(socket) {
     
     if (!player.currentlyJumping) {
         player.currentlyJumping = true;
-        
+
         function executeMethod () {
             steps++
     
@@ -78,6 +84,33 @@ io.on('connection', function(socket) {
     
   });
 
+  socket.on('shoot', function(data) {
+
+    projectiles[projectileId] = {
+        owner: socket.id,
+        startx: players[socket.id].x,
+        endx: players[socket.id].x - 20,
+        y: players[socket.id].y,
+        directionFacing: "right"
+    };
+    console.log('projectiles', projectiles)
+
+    projectileId += 1
+    
+  });
+
+  socket.on('deleteProjectile', function(id) {
+    console.log('deleteProjectile')
+    delete projectiles[id]    
+  });
+
+  socket.on('moveProjectile', function(id) {
+
+    projectiles[id].startx += 20
+    projectiles[id].endx += 20
+
+  });
+
     // remove disconnected player
     socket.on('disconnect', function() {
         delete players[socket.id]
@@ -95,7 +128,7 @@ io.on('connection', function(socket) {
 });
 
 setInterval(function() {
-  io.sockets.emit('state', players);
+  io.sockets.emit('state', players, projectiles);
 }, 1000 / 60);
 
 io.on('connection', function(socket) {
