@@ -39,14 +39,19 @@ io.on('connection', function(socket) {
 
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
+
     if (data.left) {
-      player.x -= 5;
+      if (player.x > 20){
+        player.x -= 5;
+      }
     }
     if (data.up) {
       player.y -= 5;
     }
     if (data.right) {
-      player.x += 5;
+      if (player.x < 980){
+        player.x += 5;
+      }
     }
     if (data.down) {
       player.y += 5;
