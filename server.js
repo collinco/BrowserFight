@@ -28,12 +28,13 @@ var projectileId = 0;
 
 io.on('connection', function(socket) {
     
-
   socket.on('new player', function() {
     players[socket.id] = {
-      x: 300,
-      y: 379
+        x: 300,
+        y: 379,
+        color: 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')'
     };
+    console.log('players', players)
   });
 
   socket.on('movement', function(data) {
@@ -66,13 +67,13 @@ io.on('connection', function(socket) {
         function executeMethod () {
             steps++
     
-            if( steps > 16) {
+            if( steps > 15) {
                 player.y += 5;
             } else {
                 player.y -= 5;
             }
     
-            if (steps <= 30) {
+            if (steps < 30) {
                 setTimeout(executeMethod, 20);
             } else {
                 player.currentlyJumping = false;

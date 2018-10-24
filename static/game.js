@@ -1,5 +1,5 @@
 var socket = io();
-var ColorRandomizer = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+
 var movement = {
     up: false,
     down: false,
@@ -7,7 +7,7 @@ var movement = {
     right: false
   }
   document.addEventListener('keydown', function(event) {
-    console.log('event', event)
+
     switch (event.keyCode) {
       case 65: // A
         movement.left = true;
@@ -59,9 +59,9 @@ socket.on('state', function(players, projectiles) {
 
     }
   }
-  context.fillStyle = ColorRandomizer;
   for (var id in players) {
     var player = players[id];
+    context.fillStyle = players[id].color;
     context.beginPath();
     context.arc(player.x, player.y, 20, 0, 2 * Math.PI);
     context.fill();
