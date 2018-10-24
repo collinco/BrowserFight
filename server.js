@@ -32,7 +32,7 @@ io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
       x: 300,
-      y: 300
+      y: 379
     };
   });
 
