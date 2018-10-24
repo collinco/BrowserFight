@@ -6,6 +6,11 @@ var movement = {
     left: false,
     right: false
   }
+
+  document.addEventListener('click', function(event) { 
+    socket.emit('shoot');
+  });
+
   document.addEventListener('keydown', function(event) {
 
     switch (event.keyCode) {
@@ -17,9 +22,6 @@ var movement = {
         break;
       case 32: // Spacebar
         socket.emit('jump');
-        break;
-      case 69: // E
-        socket.emit('shoot');
         break;
     }
   });

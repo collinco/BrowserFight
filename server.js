@@ -116,10 +116,10 @@ io.on('connection', function(socket) {
 
   socket.on('moveProjectile', function(id) {
 
-    if (projectiles[id].direction == 'right') {
+    if (projectiles[id] && projectiles[id].direction == 'right') {
         projectiles[id].startx += 20
         projectiles[id].endx += 20
-    } else { //left
+    } else if (projectiles[id]) { //left
         projectiles[id].startx -= 20
         projectiles[id].endx -= 20
     }
