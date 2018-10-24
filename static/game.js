@@ -56,7 +56,6 @@ socket.on('state', function(players, projectiles) {
       context.lineTo(projectiles[id].endx, projectiles[id].y);
       context.stroke(); 
       socket.emit('moveProjectile', id)
-
     }
   }
   for (var id in players) {

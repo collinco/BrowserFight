@@ -7,6 +7,7 @@ var app = express();
 var server = http.Server(app);
 var io = socketIO(server);
 var favicon = require('serve-favicon');
+
 app.use(favicon(__dirname + "/favicon/swords.png"));
 app.set('port', process.env.PORT || 8080);
 app.use('/static', express.static(__dirname + '/static'));
