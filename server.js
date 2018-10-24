@@ -36,7 +36,8 @@ io.on('connection', function(socket) {
         x: 300,
         y: 379,
         color: 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
-        facing: 'right'
+        facing: 'right',
+        owner: socket.id
     };
     console.log('players', players)
   });

@@ -48,7 +48,20 @@ var context = canvas.getContext('2d');
 socket.on('state', function(players, projectiles) {
   context.clearRect(0, 0, 1000, 400);
   for (var id in projectiles) {
-    if (projectiles[id].startx > 1000 || projectiles[id].startx < 0) {
+
+    var isDeleted = false;
+
+    for (var playerId in players) {
+      if (projectiles[id].owner !== players[playerId].owner){
+        if ((projectiles[id].startx < players[playerId].x + 20 && projectiles[id].startx > players[playerId].x - 20 ) || (projectiles[id].endx < players[playerId].x + 20 && projectiles[id].endx > players[playerId].x - 20))
+          if (projectiles[id].y < players[playerId].y + 20 && projectiles[id].y > players[playerId].y - 20) {
+            socket.emit('deleteProjectile', id)
+            isDeleted = true;
+          }
+      }
+    }
+
+    if ((projectiles[id].startx > 1000 || projectiles[id].startx < 0) && isDeleted === false) {
       socket.emit('deleteProjectile', id)
     } else {
       context.beginPath(); 
