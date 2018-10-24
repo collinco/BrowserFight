@@ -1,5 +1,5 @@
 var socket = io();
-
+var ColorRandomizer = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 var movement = {
     up: false,
     down: false,
@@ -59,7 +59,7 @@ socket.on('state', function(players, projectiles) {
 
     }
   }
-  context.fillStyle = 'green';
+  context.fillStyle = ColorRandomizer;
   for (var id in players) {
     var player = players[id];
     context.beginPath();
