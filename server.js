@@ -9,6 +9,7 @@ var io = socketIO(server);
 
 app.set('port', process.env.PORT || 8080);
 app.use('/static', express.static(__dirname + '/static'));
+
 // Routing
 app.get('/', function(request, response) {
   response.sendFile(path.join(__dirname, 'index.html'));
@@ -32,7 +33,8 @@ io.on('connection', function(socket) {
     players[socket.id] = {
         x: 300,
         y: 379,
-        color: 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')'
+        color: 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',
+        facing: 'right'
     };
     console.log('players', players)
   });
@@ -44,6 +46,7 @@ io.on('connection', function(socket) {
       if (player.x > 20){
         player.x -= 5;
       }
+      player.facing = 'left'
     }
     if (data.up) {
       player.y -= 5;
@@ -52,6 +55,7 @@ io.on('connection', function(socket) {
       if (player.x < 980){
         player.x += 5;
       }
+      player.facing = 'right'
     }
     if (data.down) {
       player.y += 5;
@@ -97,23 +101,26 @@ io.on('connection', function(socket) {
         startx: players[socket.id].x,
         endx: players[socket.id].x - 20,
         y: players[socket.id].y,
-        directionFacing: "right"
+        direction: players[socket.id].facing
     };
-    console.log('projectiles', projectiles)
 
     projectileId += 1
     
   });
 
   socket.on('deleteProjectile', function(id) {
-    console.log('deleteProjectile')
     delete projectiles[id]    
   });
 
   socket.on('moveProjectile', function(id) {
 
-    projectiles[id].startx += 20
-    projectiles[id].endx += 20
+    if (projectiles[id].direction == 'right') {
+        projectiles[id].startx += 20
+        projectiles[id].endx += 20
+    } else { //left
+        projectiles[id].startx -= 20
+        projectiles[id].endx -= 20
+    }
 
   });
 
